@@ -1,0 +1,29 @@
+#!/bin/bash
+
+DIR=$PWD
+
+if [ -z $1 ]; then echo "argument needed: name of the package"; exit 1; else 
+PACKAGE=$1; fi
+
+PNAME=$PACKAGE/$PACKAGE
+TEXPATH=$HOME/texmf
+
+cd $TEXPATH/tex/latex
+
+if wget http://mirrors.ctan.org/macros/latex/contrib/$PACKAGE.zip; then
+	unzip $PACKAGE.zip;
+	rm $PACKAGE.zip;
+	if [ ! -f $PNAME.sty ]; then
+		if [ -f $PNAME.ins ]; then
+			tex $PNAME.ins;
+			echo "generated '.sty' file from '.ins' file";
+			rm $PACKAGE.log;
+			mv $PACKAGE.* $PACKAGE;
+		fi
+	fi
+	if [ -f $PNAME.sty ]; then
+		texhash $TEXPATH;
+	fi
+else
+	echo "error: $PACKAGE: Package not found!"; exit 1;
+fi

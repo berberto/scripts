@@ -1,0 +1,14 @@
+#!/bin/bash
+
+url=$1
+title=$2
+
+wget --adjust-extension --span-hosts --convert-links --backup-converted \
+     --no-directories --timestamping --page-requisites \
+     --directory-prefix=$title \
+     $1
+
+page=$(echo $url | awk -F '/' '{print $NF}')
+page=$(ls $title/$page{,.htm,.html})
+
+ebook-convert $page $title.mobi
