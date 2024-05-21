@@ -1,0 +1,8 @@
+#!/bin/bash
+
+file=$1
+
+latexmk -cd -f -pdf -interaction=nonstopmode -synctex=1 --output-directory=.build $file.tex
+
+cp .build/$file.pdf .
+
