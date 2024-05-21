@@ -3,12 +3,21 @@
 url=$1
 title=$2
 
+echo $url
+echo $title
+
+mkdir -p .tmp
+
 wget --adjust-extension --span-hosts --convert-links --backup-converted \
      --no-directories --timestamping --page-requisites \
-     --directory-prefix=$title \
-     $1
+     --directory-prefix=.tmp \
+     $url
 
 page=$(echo $url | awk -F '/' '{print $NF}')
-page=$(ls $title/$page{,.htm,.html})
+page=$(ls .tmp/$page{,.htm,.html})
 
-ebook-convert $page $title.mobi
+ebook-convert $page epub/$title.epub
+ebook-convert $page mobi/$title.mobi
+
+rm -r .tmp
+
